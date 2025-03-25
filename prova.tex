@@ -1,4 +1,4 @@
-\documentclass[addpoints, brazil, 11pt]{exam}
+\documentclass[brazil, 11pt]{exam}
 \usepackage[brazil]{babel}
 \usepackage{multicol}
 \usepackage{amsmath}
@@ -16,13 +16,17 @@
             bottom=15mm, %
             left=15mm, %
             right=15mm, %
-            footskip=2mm %, 
+            footskip=2mm]{geometry}%, 
             %showframe] %
-            ]{geometry}
+            %{geometry}
+
+% Configurando parágrafos
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{1em}
 
 % Configuração das colunas do documento
-\setlength{\columnsep}{1cm}
-\setlength{\columnseprule}{0.2pt}
+\setlength{\columnsep}{0.0cm}
+\setlength{\columnseprule}{0.0pt}
 
 % Alterando a fonte
 \renewcommand{\familydefault}{\sfdefault}
@@ -40,11 +44,10 @@
 \DeclareSIUnit{\batimentos}{batimentos}
 
 % Define a unidade da pontuação como " pt"
-\pointpoints{pt}{pts}
-
+\pointpoints{\tiny ponto}{\tiny pontos}
 
 % Ambiente customizado para enunciar questões
-\qformat{\hspace{-.25em}
+\qformat{\hspace{-1.4em}
     \tikz[baseline=(X.south)]{
         \node[minimum width=2em, 
             minimum height=3ex, 
@@ -54,17 +57,18 @@
             inner sep=0pt, 
             outer sep=0pt] (X) {\textbf{\thequestion}}
     }
-    \hspace{-0.44em}
+    \hspace{-2.84em}
     \tikz[baseline=(X.south)]{
-        \node[minimum width=\columnwidth-0.7em, 
+        \node[minimum width=0.85\columnwidth, 
             minimum height=3ex, 
             shape=rectangle, 
             fill=lightgray, 
-            text width=\columnwidth-3em,
+            text width=0.8\columnwidth,
             align=right,
             inner sep=0pt, 
-            outer sep=0pt] (X) {\thepoints}
+            outer sep=0pt] (X) {\tiny\thepoints}
     }
+    \vspace{1ex}
 }
 
 % Circulo decorativo das respostas alternativas
@@ -81,8 +85,9 @@
 
 % Indentando letras das opções:
 \renewcommand{\choiceshook}{%
-    \setlength{\leftmargin}{1em}%
-    \setlength{\labelwidth}{1em}%
+    \setlength{\leftmargin}{0.0em}%
+    \setlength{\labelwidth}{0.0em}%
+    \setlength{\labelsep}{0.0em}%
     %\setlength{\labelwidth}{-\labelsep}%
     %\addtolength{\itemindent}{\labelwidth}%
 }
@@ -94,31 +99,32 @@
 % Redefinindo o \maketitle para a classe exam
 \makeatletter
 \renewcommand{\maketitle}{%
-    \begin{table}[t]
-        \begin{tabularx}{\linewidth}{Y Z}
+    \noindent\hspace*{-0.4em}%
+    %\begin{table}[t]
+        \begin{tabularx}{\dimexpr\linewidth-0.5em}{Y Z}
             \multirow{4}{*}{\includegraphics{logo-ifce-bat-11pt.pdf}}
             & \\
             & \curso \\
             & \noindent\atividade\ de \disciplina\\
-            & \professor $ \cdot$ \semestre \\
+            & \professor $ \cdot$ \periodo \\
         \end{tabularx} 
-        \vspace{-0.5cm}
-    \end{table}
+        \vspace{-2ex}
+    %\end{table}
     
-    \noindent
+    \noindent\hspace*{-0.9em}
     \setlength{\fboxsep}{8pt}
     \setlength{\fboxrule}{0.25pt}
-    \fbox{Estudante:\hspace{11cm} Data:\hspace{3.15cm}} 
-    \vspace{1em}
+    \fbox{Estudante:\hspace{11cm} Data:\hspace{3.05cm}} 
+    \vspace{1ex}
 }
 \makeatother
 
-% Informações para documento 
+% Identificação do documento 
 \newcommand{\curso}{Técnico Integrado em Comércio}
 \newcommand{\disciplina}{Física Complementar}
 \newcommand{\atividade}{Prova}
 \newcommand{\professor}{Prof. Paulo Santiago }
-\newcommand{\semestre}{2025-1}
+\newcommand{\periodo}{2025-1}
 
 \begin{document}
 
@@ -129,20 +135,21 @@
 
 \begin{questions}
 
-\begin{question}[1]
-    Está é uma questão de exemplo. Normalmente há um texto que pode ser acompanhado de uma figura, uma tabela, uma lista numerada, ou qualquero outra forma de apresentação da informação. 
-    Em seguida, são apresentadas as opções para escolha da resposta.
-    \begin{choices}
-        \CorrectChoice Este é o item correto. 
-        \choice Um item qualquer para ilustrar uma lista de opções.
-        \choice Vamos fazer questões objetivas de 5 itens.
-        \choice É possível ter uma quantidade maior de itens.
-        \choice Um item para encerrar o exemplo.
-    \end{choices}
+\begin{question}[1] % Enem 2012 PPL
+\begin{minipage}{0.93\linewidth}\vspace{1ex}
+\hspace{2em} Está é uma questão de exemplo. Normalmente há um texto que pode ser acompanhado de uma figura, uma tabela, uma lista numerada, ou qualquero outra forma de apresentação da informação. 
+\hspace{2em} Em seguida, são apresentadas as opções para escolha da resposta.
+\begin{choices}
+    \CorrectChoice Este é o item correto. 
+    \choice Um item qualquer para ilustrar uma lista de opções.
+    \choice Vamos fazer questões objetivas de 5 itens.
+    \choice É possível ter uma quantidade maior de itens.
+    \choice Um item para encerrar o exemplo.
+\end{choices}
+\end{minipage}
 \end{question}
 
-
-
+%\vfill\null\columnbreak
 
 \end{questions}
 
@@ -152,6 +159,7 @@
 % Total de pontos
 \begin{center}
 %\gradetable[h][questions]
+\printanswers
 \end{center}
 
 \end{document}
