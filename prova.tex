@@ -1,0 +1,157 @@
+\documentclass[addpoints, brazil, 11pt]{exam}
+\usepackage[brazil]{babel}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{siunitx}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{graphicx}
+
+% Configuração do layout da página
+\usepackage[a4paper, %
+            top=20mm, 
+            bottom=15mm, %
+            left=15mm, %
+            right=15mm, %
+            footskip=2mm %, 
+            %showframe] %
+            ]{geometry}
+
+% Configuração das colunas do documento
+\setlength{\columnsep}{1cm}
+\setlength{\columnseprule}{0.2pt}
+
+% Alterando a fonte
+\renewcommand{\familydefault}{\sfdefault}
+
+% Numeração das páginans
+\footer{}{\thepage}{}
+
+% Unidades de medida do jeito certo
+\sisetup{per-mode = symbol,
+    output-decimal-marker = {,}, 
+    inter-unit-product=\ensuremath{{}\cdot{}}}
+\DeclareSIUnit{\rev}{rev}
+\DeclareSIUnit{\volta}{voltas}
+\DeclareSIUnit{\boe}{boe}
+\DeclareSIUnit{\batimentos}{batimentos}
+
+% Define a unidade da pontuação como " pt"
+\pointpoints{pt}{pts}
+
+
+% Ambiente customizado para enunciar questões
+\qformat{\hspace{-.25em}
+    \tikz[baseline=(X.south)]{
+        \node[minimum width=2em, 
+            minimum height=3ex, 
+            shape=rectangle, 
+            fill=black, 
+            text=white, 
+            inner sep=0pt, 
+            outer sep=0pt] (X) {\textbf{\thequestion}}
+    }
+    \hspace{-0.44em}
+    \tikz[baseline=(X.south)]{
+        \node[minimum width=\columnwidth-0.7em, 
+            minimum height=3ex, 
+            shape=rectangle, 
+            fill=lightgray, 
+            text width=\columnwidth-3em,
+            align=right,
+            inner sep=0pt, 
+            outer sep=0pt] (X) {\thepoints}
+    }
+}
+
+% Circulo decorativo das respostas alternativas
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+    \node[shape=circle, %
+    draw, %
+    inner sep=0.3pt, %
+    minimum size=0.9em, %
+    fill=black, %
+    text=white] (char) {\textbf{\footnotesize #1}};} \ }
+
+% Formatando letras das "opções"
+\renewcommand{\choicelabel}{\circled{\alph{choice}}}
+
+% Indentando letras das opções:
+\renewcommand{\choiceshook}{%
+    \setlength{\leftmargin}{1em}%
+    \setlength{\labelwidth}{1em}%
+    %\setlength{\labelwidth}{-\labelsep}%
+    %\addtolength{\itemindent}{\labelwidth}%
+}
+
+% Ajustando alinhamento dos elementos do cabeçalho
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{Z}{>{\raggedleft\arraybackslash}X}
+
+% Redefinindo o \maketitle para a classe exam
+\makeatletter
+\renewcommand{\maketitle}{%
+    \begin{table}[t]
+        \begin{tabularx}{\linewidth}{Y Z}
+            \multirow{4}{*}{\includegraphics{logo-ifce-bat-11pt.pdf}}
+            & \\
+            & \curso \\
+            & \noindent\atividade\ de \disciplina\\
+            & \professor $ \cdot$ \semestre \\
+        \end{tabularx} 
+        \vspace{-0.5cm}
+    \end{table}
+    
+    \noindent
+    \setlength{\fboxsep}{8pt}
+    \setlength{\fboxrule}{0.25pt}
+    \fbox{Estudante:\hspace{11cm} Data:\hspace{3.15cm}} 
+    \vspace{1em}
+}
+\makeatother
+
+% Informações para documento 
+\newcommand{\curso}{Técnico Integrado em Comércio}
+\newcommand{\disciplina}{Física Complementar}
+\newcommand{\atividade}{Prova}
+\newcommand{\professor}{Prof. Paulo Santiago }
+\newcommand{\semestre}{2025-1}
+
+\begin{document}
+
+\maketitle
+
+% Início das colunas
+\begin{multicols}{2}
+
+\begin{questions}
+
+\begin{question}[1]
+    Está é uma questão de exemplo. Normalmente há um texto que pode ser acompanhado de uma figura, uma tabela, uma lista numerada, ou qualquero outra forma de apresentação da informação. 
+    Em seguida, são apresentadas as opções para escolha da resposta.
+    \begin{choices}
+        \CorrectChoice Este é o item correto. 
+        \choice Um item qualquer para ilustrar uma lista de opções.
+        \choice Vamos fazer questões objetivas de 5 itens.
+        \choice É possível ter uma quantidade maior de itens.
+        \choice Um item para encerrar o exemplo.
+    \end{choices}
+\end{question}
+
+
+
+
+\end{questions}
+
+% Fim das colunas
+\end{multicols}
+
+% Total de pontos
+\begin{center}
+%\gradetable[h][questions]
+\end{center}
+
+\end{document}
