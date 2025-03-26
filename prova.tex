@@ -9,6 +9,7 @@
 \usepackage{xcolor}
 \usepackage{tcolorbox}
 \usepackage{graphicx}
+\usepackage{enumitem} % Pacote para personalização de listas
 
 % Configuração do layout da página
 \usepackage[a4paper, %
@@ -30,6 +31,30 @@
 
 % Alterando a fonte
 \renewcommand{\familydefault}{\sfdefault}
+
+% Gabarito automatico. Baseado em:
+% https://tex.stackexchange.com/questions/574316/how-to-produce-answer-key-in-exam-class-for-multiple-choice-type-of-question
+\newcommand\Answers{} % Accumulates triples {{question number}{choice number}{answer}}
+\newcommand\Correct[1]{% {answer} % adds new triple to \Answers
+    \xdef\Answers{\Answers{{\arabic{question}}{\Alph{choice}}{#1}}}%
+    #1
+}
+\newcommand\printAnswer[3]{% {question number}{choice number}{answer} % format answer
+    %\par\noindent #1. Ans: (#2) #3\par
+    \par\noindent #1. #2\par
+}
+\newcommand\printAnswers{% do \printAnswer for every answer in \Answers
+    \expandafter\printAnswersX\Answers{}%
+}
+\newcommand\printAnswersX[1]{% {{qu. number}{ch. number}{answer}} % auxilary command implementing loop
+    \def\tmp{#1}%
+    \ifx\tmp\empty
+        \let\tmp\relax
+    \else
+        \def\tmp{\printAnswer#1\printAnswersX}
+    \fi
+    \tmp  
+}
 
 % Numeração das páginans
 \footer{}{\thepage}{}
@@ -119,6 +144,10 @@
 }
 \makeatother
 
+% Configuração da caixa de orientações, avisos, e gabarito de respostas
+\usepackage{tcolorbox}
+\tcbset{fontupper=\small,colback=white,colframe=black,boxrule=0.5pt}
+
 % Identificação do documento 
 \newcommand{\curso}{Técnico Integrado em Comércio}
 \newcommand{\disciplina}{Física Complementar}
@@ -133,6 +162,33 @@
 % Início das colunas
 \begin{multicols}{2}
 
+% Quadro de orientações, avisos, e gabarito de respostas
+    \begin{tcolorbox}[width=0.95\linewidth]%[width=0.9\columnwidth]
+        \textbf{Orientações} \tcblower
+        \begin{itemize}
+            %\item A prova poderá ser feita em duplas, sem consulta e sem interação entre diferentes duplas.
+            \item A prova é individual, sem consulta. Qualquer violação habilitará a invalidação da mesma. 
+            \item Cada estudante deve entregar sua prova identificada com nome e data.
+            \item A prova será recebida somente após 1 hora do seu início.
+            %\choice As questões 01, 02, 05, 07, 08 e 09 devem estar acompanhada dos cálculos.
+            \item Só serão válidas as respostas fornecidas no cartão-resposta logo abaixo. 
+            \item É necessário fornecer os 3 dígitos finais da matrícula para devida identificação.
+            \item Use caneta azul ou preta para preencher o cartão-resposta.
+            \item Deve-se preencher por inteiro o espaço dentro do círculo do cartão-resposta para que a questão seja válida.
+            \item Não faça marcações dentro da área do cartão resposta se não for referente ás respostas ou final do número da matrícula. 
+        \end{itemize}
+        
+        \vspace{0.5cm}
+        \includegraphics[width=\columnwidth,keepaspectratio]{gabarito.pdf}
+        
+        \vspace{0.5cm}
+        
+        \begin{center}
+            Boa prova!
+        \end{center}
+    \end{tcolorbox}
+
+
 \begin{questions}
 
 \begin{question}[1] % Enem 2012 PPL
@@ -140,7 +196,7 @@
 \hspace{2em} Está é uma questão de exemplo. Normalmente há um texto que pode ser acompanhado de uma figura, uma tabela, uma lista numerada, ou qualquero outra forma de apresentação da informação. 
 \hspace{2em} Em seguida, são apresentadas as opções para escolha da resposta.
 \begin{choices}
-    \CorrectChoice Este é o item correto. 
+    \CorrectChoice\Correct{} Este é o item correto. 
     \choice Um item qualquer para ilustrar uma lista de opções.
     \choice Vamos fazer questões objetivas de 5 itens.
     \choice É possível ter uma quantidade maior de itens.
@@ -149,17 +205,21 @@
 \end{minipage}
 \end{question}
 
-%\vfill\null\columnbreak
+% Espaçador para final de colunas
+\begin{center}
+    ---------[ espaço para cálculos ]---------
+\end{center}\vfill\null
 
-\end{questions}
-
-% Fim das colunas
+% Relação de respostas certas
+Respostas
+\begin{multicols}{2}
+    \printAnswers    
 \end{multicols}
 
-% Total de pontos
-\begin{center}
-%\gradetable[h][questions]
-\printanswers
-\end{center}
+
+\end{questions}
+\end{multicols}
+
+
 
 \end{document}
