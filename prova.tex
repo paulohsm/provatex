@@ -10,6 +10,9 @@
 \usepackage{tcolorbox}
 \usepackage{graphicx}
 \usepackage{enumitem} % Pacote para personalização de listas
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{colortbl} % Este é ESSENCIAL para \cellcolor
+
 
 % Configuração do layout da página
 \usepackage[a4paper, %
@@ -71,30 +74,27 @@
 % Define a unidade da pontuação como " pt"
 \pointpoints{\tiny ponto}{\tiny pontos}
 
-% Ambiente customizado para enunciar questões
-\qformat{\hspace{-1.4em}
-    \tikz[baseline=(X.south)]{
-        \node[minimum width=2em, 
-            minimum height=3ex, 
-            shape=rectangle, 
-            fill=black, 
-            text=white, 
-            inner sep=0pt, 
-            outer sep=0pt] (X) {\textbf{\thequestion}}
-    }
-    \hspace{-2.84em}
-    \tikz[baseline=(X.south)]{
-        \node[minimum width=0.85\columnwidth, 
-            minimum height=3ex, 
-            shape=rectangle, 
-            fill=lightgray, 
-            text width=0.8\columnwidth,
-            align=right,
-            inner sep=0pt, 
-            outer sep=0pt] (X) {\tiny\thepoints}
-    }
-    \vspace{1ex}
+\qformat{%
+    \noindent% Remove qualquer indentação natural do \qformat
+    {%
+        \renewcommand{\arraystretch}{1}% <-- Define a altura da linha da tabela (ajuste conforme necessário)
+        \begin{tabularx}{\dimexpr\columnwidth - 2em\relax}{%
+            @{}% Remove padding extra da esquerda
+            >{\centering\arraybackslash}p{1em}% Coluna para o número da questão, largura fixa
+            >{\raggedleft\arraybackslash}X@{}% Coluna para a barra cinza com pontos, expande para o resto, remove padding extra da direita
+        }
+            \cellcolor{black}{%
+                % Ajusta o número da questão
+                \raisebox{-0.15ex}{\color{white}\textbf{\thequestion}}% <-- Ajuste este valor NEGATIVO para mover PARA CIMA
+            } & \cellcolor{lightgray}{%
+                % Ajusta a pontuação
+                \raisebox{0.1ex}{\tiny\thepoints\hspace{0.5em}}% <-- Ajuste este valor POSITIVO para mover PARA BAIXO
+            } \\
+        \end{tabularx}%
+    }%
+    \vspace{1ex}%
 }
+
 
 % Circulo decorativo das respostas alternativas
 \newcommand*\circled[1]{\tikz[baseline=(char.base)]{
@@ -191,9 +191,10 @@
 
 \begin{questions}
 
+
 \begin{question}[1] % Enem 2012 PPL
 \begin{minipage}{0.93\linewidth}\vspace{1ex}
-\hspace{2em} Está é uma questão de exemplo. Normalmente há um texto que pode ser acompanhado de uma figura, uma tabela, uma lista numerada, ou qualquero outra forma de apresentação da informação. 
+\hspace{2em} Esta é uma questão de exemplo. Normalmente há um texto que pode ser acompanhado de uma figura, uma tabela, uma lista numerada, ou qualquero outra forma de apresentação da informação. 
 \hspace{2em} Em seguida, são apresentadas as opções para escolha da resposta.
 \begin{choices}
     \CorrectChoice\Correct{} Este é o item correto. 
@@ -204,6 +205,7 @@
 \end{choices}
 \end{minipage}
 \end{question}
+
 
 % Espaçador para final de colunas
 \begin{center}
