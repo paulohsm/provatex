@@ -1,4 +1,6 @@
 \documentclass[brazil, 11pt]{exam}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc} 
 \usepackage[brazil]{babel}
 \usepackage{multicol}
 \usepackage{amsmath}
@@ -6,13 +8,12 @@
 \usepackage{tabularx}
 \usepackage{siunitx}
 \usepackage{tikz}
-\usepackage{xcolor}
 \usepackage{tcolorbox}
 \usepackage{graphicx}
 \usepackage{enumitem} % Pacote para personalização de listas
 \usepackage[table,xcdraw]{xcolor}
 \usepackage{colortbl} % Este é ESSENCIAL para \cellcolor
-
+\usepackage{calc}
 
 % Configuração do layout da página
 \usepackage[a4paper, %
@@ -25,15 +26,23 @@
             %{geometry}
 
 % Configurando parágrafos
-\setlength{\parindent}{0cm}
 \setlength{\parskip}{1em}
+\renewcommand{\questionshook}{%
+    \setlength{\leftmargin}{0em}%
+    \setlength{\labelwidth}{-\labelsep}%
+    \setlength{\parindent}{1.5em}
+    \setlength{\parsep}{1ex}
+}
 
 % Configuração das colunas do documento
-\setlength{\columnsep}{0.0cm}
-\setlength{\columnseprule}{0.0pt}
+\setlength{\columnsep}{5mm}
+\setlength{\columnseprule}{0mm}
 
 % Alterando a fonte
 \renewcommand{\familydefault}{\sfdefault}
+
+% Configuração da caixa de orientações, avisos, e gabarito de respostas
+\tcbset{fontupper=\small,colback=white,colframe=black,boxrule=0.25pt}
 
 % Gabarito automatico. Baseado em:
 % https://tex.stackexchange.com/questions/574316/how-to-produce-answer-key-in-exam-class-for-multiple-choice-type-of-question
@@ -75,33 +84,28 @@
 \pointpoints{\tiny ponto}{\tiny pontos}
 
 \qformat{%
-    \noindent% Remove qualquer indentação natural do \qformat
-    {%
-        \renewcommand{\arraystretch}{1}% <-- Define a altura da linha da tabela (ajuste conforme necessário)
-        \begin{tabularx}{\dimexpr\columnwidth - 2em\relax}{%
-            @{}% Remove padding extra da esquerda
-            >{\centering\arraybackslash}p{1em}% Coluna para o número da questão, largura fixa
-            >{\raggedleft\arraybackslash}X@{}% Coluna para a barra cinza com pontos, expande para o resto, remove padding extra da direita
-        }
-            \cellcolor{black}{%
-                % Ajusta o número da questão
-                \raisebox{-0.15ex}{\color{white}\textbf{\thequestion}}% <-- Ajuste este valor NEGATIVO para mover PARA CIMA
-            } & \cellcolor{lightgray}{%
-                % Ajusta a pontuação
-                \raisebox{0.1ex}{\tiny\thepoints\hspace{0.5em}}% <-- Ajuste este valor POSITIVO para mover PARA BAIXO
-            } \\
-        \end{tabularx}%
-    }%
-    \vspace{1ex}%
+    \hspace{-1ex}%
+    \renewcommand{\arraystretch}{1}
+    \setlength{\tabcolsep}{0pt}
+    \begin{tabularx}{\columnwidth}{ 
+        @{}% Remove padding extra da esquerda
+        >{\centering\arraybackslash}p{1.5em}% Coluna para o número da questão, largura fixa
+        >{\raggedleft\arraybackslash}X@{}% Coluna para a barra cinza com pontos, expande para o resto, remove padding extra da direita
+    }
+        \cellcolor{black}{% Ajusta o número da questão
+            \raisebox{-0.25ex}{\color{white}\textbf{\thequestion}}% 
+        } & \cellcolor{lightgray}{% Ajusta a pontuação
+            \raisebox{0.1ex}{\tiny\thepoints\hspace{0.5em}}% 
+        } \\
+    \end{tabularx}%
 }
-
 
 % Circulo decorativo das respostas alternativas
 \newcommand*\circled[1]{\tikz[baseline=(char.base)]{
     \node[shape=circle, %
     draw, %
-    inner sep=0.3pt, %
-    minimum size=0.9em, %
+    inner sep=0.30pt, %
+    minimum size=1.0em, %
     fill=black, %
     text=white] (char) {\textbf{\footnotesize #1}};} \ }
 
@@ -110,12 +114,24 @@
 
 % Indentando letras das opções:
 \renewcommand{\choiceshook}{%
-    \setlength{\leftmargin}{0.0em}%
-    \setlength{\labelwidth}{0.0em}%
-    \setlength{\labelsep}{0.0em}%
+    \setlength{\leftmargin}{2em}%
+    \setlength{\labelsep}{0em}%
+    \setlength{\itemsep}{0pt}
+    \setlength{\parsep}{\baselineskip - 1em}
+    %\setlength{\labelwidth}{0.0em}%
     %\setlength{\labelwidth}{-\labelsep}%
     %\addtolength{\itemindent}{\labelwidth}%
 }
+
+\makeatletter
+% Salva a definição original do comando \question
+\let\orig@question\question
+% Redefine \question para injetar um espaço horizontal no início do texto da questão
+\renewcommand{\question}{%
+    \orig@question% Chama o comando \question original
+    \hspace{1em}% Adiciona o deslocamento desejado para a primeira linha do enunciado
+}
+\makeatother
 
 % Ajustando alinhamento dos elementos do cabeçalho
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
@@ -124,29 +140,22 @@
 % Redefinindo o \maketitle para a classe exam
 \makeatletter
 \renewcommand{\maketitle}{%
-    \noindent\hspace*{-0.4em}%
-    %\begin{table}[t]
-        \begin{tabularx}{\dimexpr\linewidth-0.5em}{Y Z}
+    \noindent
+        \begin{tabularx}{\linewidth}{Y Z}
             \multirow{4}{*}{\includegraphics{logo-ifce-bat-11pt.pdf}}
             & \\
             & \curso \\
-            & \noindent\atividade\ de \disciplina\\
+            & \atividade\ de \disciplina\\
             & \professor $ \cdot$ \periodo \\
         \end{tabularx} 
         \vspace{-2ex}
-    %\end{table}
-    
-    \noindent\hspace*{-0.9em}
-    \setlength{\fboxsep}{8pt}
-    \setlength{\fboxrule}{0.25pt}
-    \fbox{Estudante:\hspace{11cm} Data:\hspace{3.05cm}} 
+    % Identificação do estudante e data
+    \begin{tcolorbox}[width=\linewidth]
+        Estudante: \hfill  Data: \makebox[2.5cm]{}
+    \end{tcolorbox}
     \vspace{1ex}
 }
 \makeatother
-
-% Configuração da caixa de orientações, avisos, e gabarito de respostas
-\usepackage{tcolorbox}
-\tcbset{fontupper=\small,colback=white,colframe=black,boxrule=0.5pt}
 
 % Identificação do documento 
 \newcommand{\curso}{Técnico Integrado em Comércio}
@@ -154,6 +163,7 @@
 \newcommand{\atividade}{Prova}
 \newcommand{\professor}{Prof. Paulo Santiago }
 \newcommand{\periodo}{2025-1}
+
 
 \begin{document}
 
@@ -163,9 +173,9 @@
 \begin{multicols}{2}
 
 % Quadro de orientações, avisos, e gabarito de respostas
-    \begin{tcolorbox}[width=0.95\linewidth]%[width=0.9\columnwidth]
+    \begin{tcolorbox}[width=\linewidth]
         \textbf{Orientações} \tcblower
-        \begin{itemize}
+        \begin{itemize}[leftmargin=*, itemindent=0pt]
             %\item A prova poderá ser feita em duplas, sem consulta e sem interação entre diferentes duplas.
             \item A prova é individual, sem consulta. Qualquer violação habilitará a invalidação da mesma. 
             \item Cada estudante deve entregar sua prova identificada com nome e data.
@@ -178,24 +188,27 @@
             \item Não faça marcações dentro da área do cartão resposta se não for referente ás respostas ou final do número da matrícula. 
         \end{itemize}
         
-        \vspace{0.5cm}
+        \vspace{5mm}
         \includegraphics[width=\columnwidth,keepaspectratio]{gabarito.pdf}
         
-        \vspace{0.5cm}
-        
+        \vspace{5mm}
         \begin{center}
             Boa prova!
         \end{center}
     \end{tcolorbox}
+    
+    \vfil
+    \null
+    \columnbreak
 
 
 \begin{questions}
 
 
-\begin{question}[1] % Enem 2012 PPL
-\begin{minipage}{0.93\linewidth}\vspace{1ex}
-\hspace{2em} Esta é uma questão de exemplo. Normalmente há um texto que pode ser acompanhado de uma figura, uma tabela, uma lista numerada, ou qualquero outra forma de apresentação da informação. 
-\hspace{2em} Em seguida, são apresentadas as opções para escolha da resposta.
+\begin{question}[1]
+Esta é uma questão de exemplo. Normalmente há um texto que pode ser acompanhado de uma figura, uma tabela, uma lista numerada, ou qualquero outra forma de apresentação da informação. \\
+Em seguida, são apresentadas as opções para escolha da resposta.
+
 \begin{choices}
     \CorrectChoice\Correct{} Este é o item correto. 
     \choice Um item qualquer para ilustrar uma lista de opções.
@@ -203,9 +216,25 @@
     \choice É possível ter uma quantidade maior de itens.
     \choice Um item para encerrar o exemplo.
 \end{choices}
-\end{minipage}
 \end{question}
 
+
+\begin{question}[1] % Enem 2012 PPL
+\begin{minipage}{\linewidth}\vspace{1ex}\hspace{1em} 
+Esta é uma questão de exemplo. Normalmente há um texto que pode ser acompanhado de uma figura, uma tabela, uma lista numerada, ou qualquero outra forma de apresentação da informação. \\
+Em seguida, são apresentadas as opções para escolha da resposta.
+
+\vspace{1ex}
+\begin{choices}
+    \CorrectChoice\Correct{} Este é o item correto. 
+    \choice Um item qualquer para ilustrar uma lista de opções.
+    \choice Vamos fazer questões objetivas de 5 itens.
+    \choice É possível ter uma quantidade maior de itens.
+    \choice Um item para encerrar o exemplo.
+\end{choices}
+
+\end{minipage}
+\end{question}
 
 % Espaçador para final de colunas
 \begin{center}
@@ -218,10 +247,6 @@ Respostas
     \printAnswers    
 \end{multicols}
 
-
 \end{questions}
 \end{multicols}
-
-
-
 \end{document}
