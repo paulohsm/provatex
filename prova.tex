@@ -11,8 +11,7 @@
 \usepackage{tcolorbox}
 \usepackage{graphicx}
 \usepackage{enumitem} % Pacote para personalização de listas
-\usepackage[table,xcdraw]{xcolor}
-\usepackage{colortbl} % Este é ESSENCIAL para \cellcolor
+\usepackage{colortbl} % Necessário para \cellcolor
 \usepackage{calc}
 
 % Configuração do layout da página
@@ -122,16 +121,6 @@
     %\setlength{\labelwidth}{-\labelsep}%
     %\addtolength{\itemindent}{\labelwidth}%
 }
-
-\makeatletter
-% Salva a definição original do comando \question
-\let\orig@question\question
-% Redefine \question para injetar um espaço horizontal no início do texto da questão
-\renewcommand{\question}{%
-    \orig@question% Chama o comando \question original
-    \hspace{1em}% Adiciona o deslocamento desejado para a primeira linha do enunciado
-}
-\makeatother
 
 % Ajustando alinhamento dos elementos do cabeçalho
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
